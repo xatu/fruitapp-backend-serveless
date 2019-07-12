@@ -1,0 +1,83 @@
+service: fruitapp-backend-serverless
+
+provider:
+  name: aws
+  runtime: nodejs10.x
+  environment:
+    DYNAMOB_TABLE: ${self:service}-${opt:stage, self:provider.stage}
+  iamRoleStatements:
+    - Effect: Alow
+    Action:
+      - dynamodb:Query
+      - dynamodb:Scan
+      - dynamodb:GetItem
+      - dynamodb:PutItem
+      - dynamodb:UpdateItem
+      - dynamodb:DeleteItem
+    Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.DYNAMODB_TABLE}"
+
+functions:
+  create:
+    handler: fruits/create.handler
+    events:
+      - http:
+          path: fruits
+          method: post
+          cors: true
+
+  list:
+    handler: fruits/list.handler
+    events:
+      - http:
+          path: fruits
+          method: get
+          cors: true
+
+  get:
+    handler: fruits/get.handler
+    events:
+      - http:
+          path: fruits/${id}
+          method: get
+          cors: true
+
+  update:
+    handler: fruits/update.handler
+    events:
+      - http:
+          path: fruits/${id}
+          method: put
+          cors: true
+
+  delete:
+    handler: fruits/delete.handler
+    events:
+      - http:
+          path: fruits/${id}
+          method: delete
+          cors: true
+
+  uploadImage:
+    handler: uploadImage/index.handler
+    events:
+      - http:
+          path: uploadimage
+          method: post
+          cors: true
+
+resources:
+  Resources:
+    FruitsDynamoDbTable:
+      Type: 'AWS:DynamoDB::Table'
+      DeletionPolicy: Retain
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: ${sefl:provider.environment.DYNAMODB_TABLE}
