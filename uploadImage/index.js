@@ -7,7 +7,7 @@ exports.handler = (event, context, callback) => {
     var filepath = "images/" + event.queryStringParameters.image + ".jpeg"
     var params = {
         "Body": decodeImage,
-        "Bucket": "rafaelimages",
+        "Bucket": "fruitImages",
         "Key": filepath
     };
     

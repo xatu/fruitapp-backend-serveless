@@ -7,14 +7,18 @@ provider:
     DYNAMOB_TABLE: ${self:service}-${opt:stage, self:provider.stage}
   iamRoleStatements:
     - Effect: Alow
-    Action:
-      - dynamodb:Query
-      - dynamodb:Scan
-      - dynamodb:GetItem
-      - dynamodb:PutItem
-      - dynamodb:UpdateItem
-      - dynamodb:DeleteItem
-    Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.DYNAMODB_TABLE}"
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.DYNAMODB_TABLE}"
+    - Effect: Allow
+      Action:
+        - s3:AddBucket
+      Resource: "arn:aws:s3:${opt:region, self:provider.region}:${self:provider.environment.S3_BUCKET}"
 
 functions:
   create:
@@ -81,3 +85,7 @@ resources:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
         TableName: ${sefl:provider.environment.DYNAMODB_TABLE}
+    S3BucketFruitImages:
+      Type: 'AWS::S3::Bucket'
+      Properties:
+        BucketName: ${sefl:provider.environment.S3_BUCKET}
