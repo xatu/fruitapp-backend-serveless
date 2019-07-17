@@ -2,10 +2,10 @@ const doc = require('aws-sdk'),
     dynamo = new doc.DynamoDB(),
     uuid = require('uuid');
 
-exports.handler = function(event, context) {
-    var new_id = uuid.v1();
+exports.handler = async (event, context) => {
+    let new_id = uuid.v1();
     
-    var params = {
+    let params = {
         Item: {
             "id" : {
                 S: new_id
@@ -29,5 +29,5 @@ exports.handler = function(event, context) {
     dynamo.putItem(params, (err, data) => {
         if (err) console.log(err, err.stack);
         else context.succeed(data);
-    });
+    });    
 };

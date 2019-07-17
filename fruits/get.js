@@ -1,7 +1,7 @@
 const doc = require('aws-sdk'),
     dynamo = new doc.DynamoDB();
 
-exports.handler = function(event, context) {
+exports.handler = async (event, context) => {
 
     var params = {
         TableName:'products',
@@ -12,7 +12,7 @@ exports.handler = function(event, context) {
         }
    };
 
-    dynamo.getItem(params, function(err, data){
+    dynamo.getItem(params, (err, data) => {
         if (err) console.log(err, err.stack); 
         else {
              context.succeed(data);

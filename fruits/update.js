@@ -1,7 +1,7 @@
 const doc = require('aws-sdk'),
     dynamo = new doc.DynamoDB();
 
-exports.handler = function(event, context) {
+exports.handler = async (event, context) => {
     
     var params = {
         Key: {
