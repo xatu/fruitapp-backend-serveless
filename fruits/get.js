@@ -12,10 +12,11 @@ exports.handler = async (event, context) => {
         }
    };
 
-    dynamo.getItem(params, (err, data) => {
-        if (err) console.log(err, err.stack); 
-        else {
-             context.succeed(data);
-        }
-    });
+    dynamo.getItem(params).promise()
+        .then( data => {
+            context.succeed(data)
+        })
+        .catch( err => {
+            console.log(err.stack);
+        });
 };
