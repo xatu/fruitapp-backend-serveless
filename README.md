@@ -54,5 +54,5 @@ curl -XPUT -H "Content-type: application/json" -d '{
 
 ### Upload image of one fruit
 ```
-curl -T Local/path/apple.jpg https://<<apit-url-aws>>/uploadimages
+curl -XPOST -T Local/path/apple.jpg https://<<apit-url-aws>>/uploadimage
 ```
